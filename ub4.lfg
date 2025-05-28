@@ -1,0 +1,239 @@
+"Mustergrammatik Übungsblatt 4 (Sommersemester 2025)
+Diese Grammatik parst die Sätze:
+
+Ich mag Aepfel.
+Er dachte blitzschnell.
+Die Wikinger feuerten Wickie mit Gebruell an.
+An dem Tag flieht Wickie vor dem Wolf.
+Wer gab Wickie das Schwert?
+"
+
+GERMAN GRAM CONFIG (1.0)
+ROOTCAT IP.
+LEXENTRIES (all all).
+RULES (all all).
+GOVERNABLERELATIONS	SUBJ OBJ OBJ-TH OBL-TH COMP XCOMP.
+SEMANTICFUNCTIONS	ADJUNCT MOD TOPIC FOCUS.
+NONDISTRIBUTIVES	NUM PERS GEND.
+----
+
+GERMAN GRAM RULES (1.0)
+
+IP -->  {PP: ! $ (^ADJ); I' PUNCT: (^ CLAUSE-TYPE) = declarative;
+        |
+        NP: (^SUBJ) = !; I' PUNCT: (^ CLAUSE-TYPE) = declarative;
+        |
+        NP: (^SUBJ) = !; I' PUNCT: (^ CLAUSE-TYPE) = interroative;
+        
+        }.
+
+PP --> P NP: (^OBJ) = !.
+
+NP --> (Det) N'.
+
+N' -->  {N | PRON |
+         AP: ! $ (^ ADJ)                   "Achtung: Es fehlen noch Regeln für die AP!"
+                (^ CASE) = (! CASE)        "Mit den folgenden vier Regeln stellen wir sicher, dass Adjektiv und Nomen
+                                            kongruieren. Dazu gibt es am Ende des Semesters mal noch eine detaillierte Vorlesung."
+                (^ PERS) = (! PERS)
+                (^ GEND) = (! GEND)
+                (^ NUM) = (! NUM)
+                (^ DECL) = (! DECL); 
+         N'
+        }.
+
+I' -->  I
+        VP.
+
+
+
+VP -->  {NP: (^OBJ) = !;
+        |
+        AdvP: ! $ (^ADJ);
+        |
+        NP: (^ SUBJ) = !; PP: (^ OBL-TH) = !
+        |
+        NP: (^OBJ) = !; VP'
+        |
+        NP: (^ OBJ-TH) = !; NP: (^ OBJ) = !;
+        }.        
+
+VP' --> PP PRT.
+
+AdvP --> Adv'.
+
+Adv' --> Adv.
+
+----
+
+GERMAN GRAM LEXICON (1.0)
+
+.       PUNCT * (^ CLAUSE-TYPE) = declarative.
+?       PUNCT * (^ CLAUSE-TYPE) = interroative.
+
+Ich     PRON *  (^PRED) = 'pro'
+                (^CASE) = nom
+                (^NUM) = sg
+                (^PERS) = 1.
+
+Er      PRON *  (^PRED) = 'pro'
+                (^NUM) = sg
+                (^PERS) = 3
+                (^GEND) = m 
+                (^CASE) = nom.
+
+mag     I *     (^PRED) = 'mögen<(^ SUBJ)(^OBJ)>'
+                (^TENSE) = present
+                (^SUBJ NUM) =c sg
+                (^SUBJ CASE) =c nom
+                {(^SUBJ PERS) =c 1 | (^SUBJ PERS) =c 3}
+                (^OBJ CASE) =c acc
+                (^FIN) = +.
+
+dachte    I *   (^PRED) = 'denken<(^ SUBJ)>'
+                (^TENSE) = past
+                (^SUBJ NUM) =c sg
+                (^SUBJ CASE) =c nom
+                {(^SUBJ PERS) =c 1 | (^SUBJ PERS) =c 3}
+                (^FIN) = +.
+
+Aepfel   N *     (^PRED) = 'Apfel'
+                {(^CASE) = nom | (^ CASE) = acc | (^ CASE) = gen}
+                (^GEND) = m
+                (^NUM) = pl
+                (^PERS) = 3.
+
+blitzschnell Adv * (^PRED) = 'blitzschnell'.
+
+schwarzen A *   (^ PRED) = 'schwarzen'
+                (^ PERS) = 3
+                {(^ NUM) = sg
+                        {(^ GEND) = m
+                                { (^ CASE) = gen | (^ CASE) = dat | (^ CASE) = acc }
+                        |
+                        { (^ GEND) = n | (^ GEND) = f }
+                                { (^ CASE) = gen | (^ CASE) = dat }
+                        }
+                |
+                (^ NUM) = pl
+                }
+                (^ DECL) = st-det.  "'schwarzen' ist schwach adjektivisch dekliniert. Grundidee: Der Satz '*Als Halvar schwarzen Segel sieht ...' ist ungrammatisch, es müsste ja 'schwarze Segel' sein. Das stellt man mit DECL sicher, mehr dazu am Ende des Semesters."
+
+"Satz1"
+
+Die Det * (^DEF) = +
+        {(^CASE) = nom | (^ CASE) = acc }
+        { (^ NUM)  = sg
+          (^ GEND) = f
+        |
+        (^ NUM) = pl
+          {(^ GEND) = n |(^ GEND) =  m | (^ GEND) = f}
+        }
+        (^ PERS) = 3.
+
+Wikinger N * (^PRED) = 'Wikinger'
+        {(^NUM) = sg
+        {(^CASE) = nom | (^ CASE) = acc | (^ CASE) = dat}
+        
+        |
+        (^NUM) = pl
+        {(^CASE) = nom | (^ CASE) = acc | (^ CASE) = dat | (^ CASE) = gen}
+        }
+        (^GEND) = m
+        (^PERS) = 3.
+        
+              
+feuerten I * (^PRED) = 'feuern<(^SUBJ)(^OBJ)>'
+                (^TENSE) = past
+                (^SUBJ NUM) =c pl
+                (^SUBJ CASE) =c nom
+                {(^SUBJ PERS) =c 1 | (^SUBJ PERS) =c 2 | (^SUBJ PERS) =c 3}
+                (^OBJ CASE) =c acc
+                (^FIN) = +.
+                (^V-TYPE) = separable
+                (^PRT-FORM) =c „an“.
+
+an PRT * (^PRT-FORM) =c „an“
+         (^V-TYPE) = separable.
+        
+Wickie N * (^PRED) = 'Wickie'
+      { (^ CASE) = nom | (^ CASE) = acc | (^ CASE) = dat }
+      {(^ GEND) = m | (^ GEND) = f }
+      (^ NUM) = sg
+      (^ PERS) = 3.
+      
+
+mit P *(^PRED) = 'mit<(^OBJ)>'
+       (^OBJ CASE) =c dat.              
+
+Gebruell N* (^PRED) = 'Gebruell'
+        {(^CASE) = nom | (^ CASE) = acc | (^ CASE) = dat}
+        (^GEND) = n
+        (^NUM) = sg
+        (^PERS) = 3.
+      
+"Satz2"
+An P * (^PRED) = 'an<(^OBJ)>'
+       (^OBJ CASE) =c dat.
+
+dem Det * (^ DEF)  = +  
+        (^ CASE) = dat
+        {(^ GEND) = n |(^ GEND) =  m}
+        (^ NUM)  = sg
+        (^ PERS) = 3.
+
+Tag N * (^PRED) = 'Tag'
+        {(^CASE) = nom | (^ CASE) = acc | (^ CASE) = dat}
+        (^GEND) = m
+        (^NUM) = sg
+        (^PERS) = 3.
+
+flieht I * (^PRED) = 'fliehen<(^SUBJ)(^OBL-TH)>'
+                (^TENSE) = present
+                (^SUBJ NUM) =c sg
+                (^SUBJ CASE) =c nom
+                (^SUBJ PERS) =c 3
+                (^FIN) = +.
+               
+
+vor P *(^PRED) = 'vor<(^OBJ)>'
+       (^OBJ CASE) =c dat.
+
+Wolf N * (^PRED) = 'Wolf'
+      (^ GEND) = m
+      { (^ CASE) = nom | (^ CASE) = acc | (^ CASE) = dat }
+      (^NUM) = sg
+      (^ PERS) = 3.
+
+"Satz3"
+
+Wer PRON * (^PRED) = 'pro'
+      (^ GEND) = m
+      (^ CASE) = nom
+      (^NUM) = sg
+      (^ PERS) = 3.
+
+gab I * (^PRED) = 'geben<(^SUBJ)(^OBJ)(^OBJ-TH)>'
+                (^TENSE) = past
+                (^SUBJ NUM) =c sg
+                (^SUBJ CASE) =c nom
+                {(^SUBJ PERS) =c 1 | (^SUBJ PERS) =c 3}
+                (^OBJ CASE) =c acc
+                (^OBJ-TH CASE) =c dat
+                (^FIN) = +.
+
+das Det * (^DEF) = +
+        {(^CASE) = nom | (^ CASE) = acc }
+        (^ NUM)  = sg
+        (^ GEND) = n
+        (^ PERS) = 3.
+
+Schwert N * (^PRED) = 'Schwert'
+      (^ GEND) = n
+      { (^ CASE) = nom | (^ CASE) = acc | (^ CASE) = dat }
+      (^NUM) = sg
+      (^ PERS) = 3.      
+----
+TOY GERMAN TEMPLATES (1.0)
+
+----
