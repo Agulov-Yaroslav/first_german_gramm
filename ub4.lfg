@@ -3,9 +3,20 @@ Diese Grammatik parst die Sätze:
 
 Ich mag Aepfel.
 Er dachte blitzschnell.
+
 Die Wikinger feuerten Wickie mit Gebruell an.
 An dem Tag flieht Wickie vor dem Wolf.
 Wer gab Wickie das Schwert?
+TODO: Hat Sven die Kinder aus Flake entfuehrt?
+TODO: Als Halvar die schwarzen Segel sieht ruft er die Maenner.
+
+
+An dem Tag flieht Sven aus Flake.
+Wer gab Sven die Kinder?
+
+Halvar ruft die schwarzen Segel.
+er ruft die Maenner.
+Halvar ruft die Maenner.
 "
 
 GERMAN GRAM CONFIG (1.0)
@@ -24,8 +35,14 @@ IP -->  {PP: ! $ (^ADJ); I' PUNCT: (^ CLAUSE-TYPE) = declarative;
         NP: (^SUBJ) = !; I' PUNCT: (^ CLAUSE-TYPE) = declarative;
         |
         NP: (^SUBJ) = !; I' PUNCT: (^ CLAUSE-TYPE) = interroative;
-        
+        |
+        I' PUNCT: (^ CLAUSE-TYPE) = interroative;
+        |
+        CP I' PUNCT: (^ CLAUSE-TYPE) = declarative;
         }.
+
+CP --> C'.
+C' --> C VP.
 
 PP --> P NP: (^OBJ) = !.
 
@@ -42,9 +59,10 @@ N' -->  {N | PRON |
          N'
         }.
 
-I' -->  I
-        VP.
 
+I' --> { I VP | I VP: (^AUX-FORM) =c 'haben'}.
+
+AP --> A.
 
 
 VP -->  {NP: (^OBJ) = !;
@@ -56,9 +74,23 @@ VP -->  {NP: (^OBJ) = !;
         NP: (^OBJ) = !; VP'
         |
         NP: (^ OBJ-TH) = !; NP: (^ OBJ) = !;
+        |
+        NP: (^ SUBJ) = !; VP'
+        |
+        NP: (^ SUBJ) = !; NP: (^OBJ) = !;
         }.        
 
-VP' --> PP PRT.
+
+VP' --> {PP PRT
+        |
+        NP VP'
+        |
+        PP: (^ OBL-TH) = !;  V
+        |
+        NP: (^OBJ) = !; V
+        |
+        NP: (^OBJ) = !; VP'
+}.
 
 AdvP --> Adv'.
 
@@ -68,8 +100,9 @@ Adv' --> Adv.
 
 GERMAN GRAM LEXICON (1.0)
 
-.       PUNCT * (^ CLAUSE-TYPE) = declarative.
 ?       PUNCT * (^ CLAUSE-TYPE) = interroative.
+.       PUNCT * (^ CLAUSE-TYPE) = declarative.
+
 
 Ich     PRON *  (^PRED) = 'pro'
                 (^CASE) = nom
@@ -232,7 +265,110 @@ Schwert N * (^PRED) = 'Schwert'
       (^ GEND) = n
       { (^ CASE) = nom | (^ CASE) = acc | (^ CASE) = dat }
       (^NUM) = sg
-      (^ PERS) = 3.      
+      (^ PERS) = 3.
+
+
+"Satz4"
+
+Hat I * (^AUX-FORM) = 'haben'
+        (^TENSE) = present
+        (^SUBJ NUM) =c sg
+        (^SUBJ CASE) =c nom
+        (^SUBJ PERS) =c 3
+        (^FIN) = +.
+
+
+Sven N * (^PRED) = 'Sven'
+      { (^ CASE) = nom | (^ CASE) = acc | (^ CASE) = dat }
+      (^ GEND) = m
+      (^ NUM) = sg
+      (^ PERS) = 3.
+
+die Det * (^DEF) = +
+        {(^CASE) = nom | (^ CASE) = acc }
+        { (^ NUM)  = sg
+          (^ GEND) = f
+        |
+        (^ NUM) = pl
+          {(^ GEND) = n |(^ GEND) =  m | (^ GEND) = f}
+        }
+        (^ PERS) = 3.
+
+Kinder N * (^PRED) = 'Kinder'
+      { (^ CASE) = nom | (^ CASE) = acc | (^ CASE) = gen }
+      (^ GEND) = n
+      (^ NUM) = pl
+      (^ PERS) = 3.
+
+Flake N * (^PRED) = 'Flake'
+      { (^ CASE) = nom | (^ CASE) = acc | (^ CASE) = dat | (^ CASE) = gen }
+      (^ GEND) = n
+      (^ NUM) = sg
+      (^ PERS) = 3.
+
+aus P *(^PRED) = 'aus<(^OBJ)>'
+       (^OBJ CASE) =c dat. 
+
+entfuehrt V * (^PRED) = 'entfuehrt<(^SUBJ)(^OBJ)(^OBL-TH)>'
+                (^TENSE) = perfect
+                (^SUBJ NUM) =c sg
+                (^SUBJ CASE) =c nom
+                (^SUBJ PERS) =c 3
+                (^FIN) = - 
+                (^AUX-FORM) =c 'haben'.
+
+"Satz5"
+
+Als C *(^COMP-TYPE) = 'als'.
+
+Halvar N * (^PRED) = 'Halvar'
+      { (^ CASE) = nom | (^ CASE) = acc | (^ CASE) = dat }
+      (^ GEND) = m
+      (^ NUM) = sg
+      (^ PERS) = 3.
+      
+Segel N* (^PRED) = 'Segel'
+	      {(^NUM) = sg
+        {(^CASE) = nom | (^ CASE) = acc | (^ CASE) = dat}
+        |
+        (^NUM) = pl
+	      {(^CASE) = nom | (^ CASE) = acc}
+        }
+        (^GEND) = n
+        (^PERS) = 3.      
+      
+sieht V * (^PRED) = 'sehen<(^SUBJ)(^OBJ)>'
+                "(^COMP-FORM) =c'als'"
+                (^COMP-TYPE) =c 'als'
+                (^TENSE) = present
+                (^SUBJ NUM) =c sg
+                (^SUBJ CASE) =c nom
+                (^SUBJ PERS) =c 3
+                (^OBJ CASE) =c acc
+                (^FIN) = +.     
+                
+                
+ruft I * (^PRED) = 'rufen<(^SUBJ)(^OBJ)>'
+                (^TENSE) = present
+                (^SUBJ NUM) =c sg
+                (^SUBJ CASE) =c nom
+                (^SUBJ PERS) =c 3
+                (^OBJ CASE) =c acc
+                (^FIN) = +.     
+                
+                
+er      PRON *  (^PRED) = 'pro'
+                (^NUM) = sg
+                (^PERS) = 3
+                (^GEND) = m 
+                (^CASE) = nom.                
+                
+Maenner N * (^PRED) = 'Maenner'
+        (^NUM) = pl
+        {(^CASE) = nom | (^ CASE) = acc }
+        (^GEND) = m
+        (^PERS) = 3.               
+
 ----
 TOY GERMAN TEMPLATES (1.0)
 
