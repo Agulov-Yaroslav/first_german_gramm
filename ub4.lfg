@@ -7,9 +7,8 @@ Er dachte blitzschnell.
 Die Wikinger feuerten Wickie mit Gebruell an.
 An dem Tag flieht Wickie vor dem Wolf.
 Wer gab Wickie das Schwert?
-TODO: Hat Sven die Kinder aus Flake entfuehrt?
-TODO: Als Halvar die schwarzen Segel sieht ruft er die Maenner.
-
+Hat Sven die Kinder aus Flake entfuehrt?
+Als Halvar die schwarzen Segel sieht ruft er die Maenner.
 
 An dem Tag flieht Sven aus Flake.
 Wer gab Sven die Kinder?
@@ -32,13 +31,13 @@ GERMAN GRAM RULES (1.0)
 
 IP -->  {PP: ! $ (^ADJ); I' PUNCT: (^ CLAUSE-TYPE) = declarative;
         |
-        NP: (^SUBJ) = !; I' PUNCT: (^ CLAUSE-TYPE) = declarative;
+        NP: (^SUBJ) = !; I' PUNCT: (^ CLAUSE-TYPE) = declarative; "Satz1"
         |
         NP: (^SUBJ) = !; I' PUNCT: (^ CLAUSE-TYPE) = interroative;
         |
-        I' PUNCT: (^ CLAUSE-TYPE) = interroative;
+        I' PUNCT: (^ CLAUSE-TYPE) = interroative; "Satz4"
         |
-        CP I' PUNCT: (^ CLAUSE-TYPE) = declarative;
+        CP:  ! $ (^ ADJ); I' PUNCT: (^ CLAUSE-TYPE) = declarative;
         }.
 
 CP --> C'.
@@ -64,33 +63,30 @@ I' --> { I VP | I VP: (^AUX-FORM) =c 'haben'}.
 
 AP --> A.
 
-
 VP -->  {NP: (^OBJ) = !;
         |
         AdvP: ! $ (^ADJ);
         |
-        NP: (^ SUBJ) = !; PP: (^ OBL-TH) = !
+        NP: (^ SUBJ) = !; PP: (^ OBL-TH) = !;
         |
-        NP: (^OBJ) = !; VP'
+        NP: (^OBJ) = !; VP 
         |
         NP: (^ OBJ-TH) = !; NP: (^ OBJ) = !;
         |
-        NP: (^ SUBJ) = !; VP'
+        NP: (^ SUBJ) = !; VP
         |
         NP: (^ SUBJ) = !; NP: (^OBJ) = !;
-        }.        
-
-
-VP' --> {PP PRT
         |
-        NP VP'
+        PP: ! $ (^ ADJ); V-Part 
         |
-        PP: (^ OBL-TH) = !;  V
+        PP: (^ OBL-TH) = !; V
         |
         NP: (^OBJ) = !; V
         |
-        NP: (^OBJ) = !; VP'
-}.
+        NP: (^OBJ) = !; VP
+        |
+        }.  
+
 
 AdvP --> Adv'.
 
@@ -186,12 +182,12 @@ feuerten I * (^PRED) = 'feuern<(^SUBJ)(^OBJ)>'
                 (^V-TYPE) = separable
                 (^PRT-FORM) =c „an“.
 
-an PRT * (^PRT-FORM) =c „an“
+an V-Part * (^PRT-FORM) =c „an“
          (^V-TYPE) = separable.
         
 Wickie N * (^PRED) = 'Wickie'
       { (^ CASE) = nom | (^ CASE) = acc | (^ CASE) = dat }
-      {(^ GEND) = m | (^ GEND) = f }
+      (^ GEND) = m
       (^ NUM) = sg
       (^ PERS) = 3.
       
