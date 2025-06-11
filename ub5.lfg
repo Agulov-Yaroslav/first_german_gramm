@@ -1,0 +1,165 @@
+"Mustergrammatik Übungsblatt 5 (Sommersemester 2025)
+Diese Grammatik parst die Sätze:
+
+Die Raeuber wurden von Wickie ausgetrickst.
+Tjure denkt dass das Eis das Boot nicht bremst.
+
+Die Raeuber wurden blitzschnell.
+Tjure denkt blitzschnell. 
+"
+
+GERMAN GRAM CONFIG (1.0)
+ROOTCAT IP.
+LEXENTRIES (all all).
+RULES (all all).
+GOVERNABLERELATIONS	SUBJ OBJ OBJ-TH OBL-TH COMP XCOMP.
+SEMANTICFUNCTIONS	ADJUNCT MOD TOPIC FOCUS.
+NONDISTRIBUTIVES	NUM PERS GEND.
+----
+
+GERMAN GRAM RULES (1.0)
+
+IP -->  {NP: (^SUBJ) = !; I' PUNCT: (^ CLAUSE-TYPE) = declarative; "Satz1"
+        |
+        NP: (^SUBJ) = !; I' "Satz2"
+        |
+        NP: (^SUBJ) = !; VP "Satz2 nach dass"
+        |
+        CP:  ! $ (^ ADJ); I' PUNCT: (^ CLAUSE-TYPE) = declarative;
+        }.
+
+I' --> { I VP "Satz2"
+        |
+        I VP: (^AUX-FORM) =c 'werden'; "Satz1"
+        }.
+
+CP --> C IP.
+
+PP --> P NP: (^OBJ) = !. "Satz1"
+
+NP --> (Det) N'.
+N' -->  N.
+
+VP --> {
+      PP: (^ OBL-TH) = !; V "Satz1"  
+      |
+      CP "Satz2"
+      |
+      NP : (^OBJ) = !; V' "Satz2 "
+      }. 
+
+V' --> AdvP V.
+
+
+AdvP --> Adv'.
+Adv' --> Adv.
+
+
+----
+
+GERMAN GRAM LEXICON (1.0)
+
+. PUNCT * (^ CLAUSE-TYPE) = declarative.
+
+
+"Satz 1"
+
+Die Det * (^DEF) = +
+        {(^CASE) = nom | (^ CASE) = acc }
+        { (^ NUM)  = sg
+          (^ GEND) = f
+        |
+        (^ NUM) = pl
+          {(^ GEND) = n |(^ GEND) =  m | (^ GEND) = f}
+        }
+        (^ PERS) = 3. 
+
+Raeuber N * (^PRED) = 'Raeuber'
+        {(^NUM) = sg
+        {(^CASE) = nom | (^ CASE) = acc | (^ CASE) = dat}
+        |
+        (^NUM) = pl
+        {(^CASE) = nom | (^ CASE) = acc | (^ CASE) = dat | (^ CASE) = gen}
+        }
+        (^GEND) = m
+        (^PERS) = 3.
+
+wurden I *   (^AUX-FORM) = 'wurden'
+                (^TENSE) = present
+                (^SUBJ NUM) =c pl
+                (^SUBJ CASE) =c nom
+                (^SUBJ PERS) =c 3
+                (^FIN) = +.
+              
+
+von P *(^PRED) = 'von<(^OBJ)>'
+       (^OBJ CASE) =c dat.                
+
+Wickie N * (^PRED) = 'Wickie'
+      { (^ CASE) = nom | (^ CASE) = acc | (^ CASE) = dat }
+      (^ GEND) = m
+      (^ NUM) = sg
+      (^ PERS) = 3.
+
+
+"ausgetrickst V-Part * (^PRED) = 'ausgetrickst<NULL, (^SUBJ)(^OBL-TH)>'"
+ausgetrickst V * (^PRED) = 'ausgetrickst<(^SUBJ)(^OBL-TH)>'
+              (^TENSE) = perfect
+              (^SUBJ NUM) =c sg
+              (^SUBJ CASE) =c nom
+              (^SUBJ PERS) =c 3
+              (^FIN) = - 
+              (^AUX-FORM) =c 'werden'.
+          
+
+"Satz 2"              
+
+Tjure N * (^PRED) = 'Tjure'
+      { (^ CASE) = nom | (^ CASE) = acc | (^ CASE) = dat }
+      (^ GEND) = m
+      (^ NUM) = sg
+      (^ PERS) = 3.
+
+denkt I *   (^PRED) = 'denken<(^ SUBJ)(^COMP)>'
+            (^TENSE) = present
+            (^SUBJ NUM) =c sg
+            (^SUBJ CASE) =c nom
+            (^SUBJ PERS) =c 3
+            (^FIN) = +.
+
+dass C * (^PRED) = 'dass'
+         (^COMP TYPE) = cpdass.
+
+das Det * (^DEF) = +
+        {(^CASE) = nom | (^ CASE) = acc }
+        (^ NUM)  = sg
+        (^ GEND) = n
+        (^ PERS) = 3.
+
+Eis N * (^PRED) = 'Eis'
+        {(^CASE) = nom | (^ CASE) = acc | (^ CASE) = dat}
+        (^NUM) = sg
+        (^GEND) = n
+        (^PERS) = 3.    
+
+Boot N * (^PRED) = 'Boot'
+        {(^CASE) = nom | (^ CASE) = acc | (^ CASE) = dat}
+        (^NUM) = sg
+        (^GEND) = n
+        (^PERS) = 3.
+
+nicht Adv * (^PRED) = 'nicht'
+            (^ADJUNCT) = neg.        
+
+bremst V * (^PRED) = 'bremsen<(^SUBJ)(^OBJ)>'
+          (^TENSE) = present
+          (^SUBJ CASE) = nom
+          (^SUBJ NUM) =c sg
+          (^SUBJ PERS) =c 3
+          (^FIN) = +.
+          (^OBJ CASE) = acc.
+
+----
+TOY GERMAN TEMPLATES (1.0)
+
+----
